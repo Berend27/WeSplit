@@ -10,6 +10,7 @@ import SwiftUI
 // todo: pick back up at "Hiding the keyboard"
 
 struct ContentView: View {
+  @FocusState private var amountIsFocused: Bool
   @State private var checkAmount = 0.0
   @State private var numberOfPeople = 2
   @State private var tipPercenage = 20
@@ -32,6 +33,7 @@ struct ContentView: View {
           Section {
             TextField("Amount", value: $checkAmount, format: .currency(code:Locale.current.currency?.identifier ?? "USD"))
               .keyboardType(.decimalPad)
+              .focused($amountIsFocused)
             
             Picker("Number of people", selection: $numberOfPeople) {
               ForEach(2..<100) {
@@ -56,6 +58,13 @@ struct ContentView: View {
           }
         }
         .navigationTitle("WeSplit")
+        .toolbar {
+          if amountIsFocused {
+            Button("Done") {
+              amountIsFocused = false
+            }
+          }
+        }
       }
     } else {
       // Fallback on earlier versions
